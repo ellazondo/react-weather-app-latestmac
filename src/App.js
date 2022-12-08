@@ -6,10 +6,7 @@ export default function App() {
       Weather App
       <footer>
         This project was coded by Gabriella Elizondo and is{""}
-        <a
-          href="https://github.com/ellazondo/react-weather-app-new-mac"
-          target="_blank"
-        >
+        <a href="https://github.com/ellazondo/react-weather-app-new-mac">
           open sourced on Github
         </a>
       </footer>
