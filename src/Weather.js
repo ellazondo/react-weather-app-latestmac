@@ -1,44 +1,72 @@
-import React from "react";
+import {useState} from "react";
 import "./Weather.css";
+import WeatherInfo from "./WeatherInfo";
+import axios from 'axios';
 
 export default function Weather() {
+  const [ready, setReady] = useState(false);
+  const [weatherData, setWeatherData] = useState({});
+  const [city, setCity] = useState("New York");
+
+  function handleResponse (response) {
+    
+    setWeatherData({
+      
+      temperature: response.data.main.temp,
+      humidity: response.data.main.humidity,
+      wind: response.data.wind.speed,
+      description: response.data.weather[0].description,
+      city: response.data.name,
+      date: new Date (response.data.dt * 1000),
+      icon: response.data.weather[0].icon
+    })
+    setReady(true);
+    
+  }
+
+  function search() {
+    const apiKey = "7e51999498b98449960c3d517772a9e2";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`
+    axios.get(apiUrl).then(handleResponse);
+  }
+  
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    search();
+    
+  }
+
+  function handleCityChange(e) {
+    setCity(e.target.value);
+  }
+
+  if (ready) {
   return (
+    <div className="Home-wrapper">
     <div className="Weather">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-9">
             <input
               type="search"
               placeholder="Enter a city"
-              className="form-control"
+              className="searchBar form-control"
+              onChange={handleCityChange}
             />
           </div>
           <div className="col-3">
-            <input type="submit" value="search" className="btn btn-primary" />
+            <input type="submit" value="🌤" className="searchButton btn btn-primary" />
           </div>
         </div>
       </form>
-      <h1>New York</h1>
-      <ul>
-        <li>Wednesday 07:00</li>
-        <li>Mostly Cloudy</li>
-      </ul>
-      <div className="row">
-        <div className="col-6">
-          <img
-            src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png"
-            alt="Mostly Cloudy"
-          />
-          6 degrees Celcius
-        </div>
-        <div className="col-6">
-          <ul>
-            <li>Percipitation: 15%</li>
-            <li>Humidity: 72%</li>
-            <li>Wind: 13 km/h</li>
-          </ul>
-        </div>
+      <WeatherInfo weatherData={weatherData} />
       </div>
-    </div>
+      </div>
+
   );
+    } else { 
+    search();
+    return "loading";
+  }
 }
