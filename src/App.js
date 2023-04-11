@@ -9,7 +9,10 @@ export default function App() {
 
         <footer className="foot">
           Coded by Gabriella Elizondo and is{" "}
-          <a href="https://github.com/ellazondo/react-weather-app-new-mac">
+          <a 
+          href="https://github.com/ellazondo/react-weather-app-latestmac"
+          target="_blank"
+          >
             open sourced on Github
           </a>
         </footer>
